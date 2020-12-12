@@ -1,0 +1,63 @@
+{% extends "header.html" %}
+{% block content %}
+
+  {% if error_msg %}
+    <b>{{ error_msg }}</b>
+  {% endif %}
+
+  {% if group %}
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {# Display card for the group #}
+    <div class="row">
+      <div class="col">
+        <div class="card text-center">
+          <div class="card-header">
+            <h1>@{{ group.group_id}}</h1>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><b>Description: </b> {{ group.description}}</li>
+              <li class="list-group-item"><b>Date Created: </b> {{ group.date}}</li>
+              <li class="list-group-item"><b>Group Leader</b> {{ group.leader.first_name}} {{group.leader.last_name}}</li>
+            </ul>
+          </div>
+          <li class="list-group-item">
+          <p class="font-weight-bold">Followers:</p>
+          <ul>
+            {% for follower in group.followers %}
+              <li>@{{follower.username}} - {{follower.last_name}}, {{ follower.first_name }}</li>
+            {% endfor %}
+          </ul>
+          </li>
+        </div>
+        {% if current_user.is_authenticated %}
+          {% if current_user.username == group.leader.username %}
+            Leaders can <a href="{{ url_for('polls.add_poll', group_id=group.group_id) }}">
+              Create a new poll
+            </a>
+          {% endif%}
+          {% if current_user not in group.followers %}
+            <form action="" method="post">
+              {{ join_form.csrf_token }}
+              <div class="form-group">
+                {{ join_form.submit(type="submit", class="btn btn-primary btn-lg btn-block") }}
+              </div>
+            </form>  
+          {% else %}
+            <h5> Follower Polls Here </h5>
+          {% endif %}
+        {% endif %}  
+      </div>
+    </div>
+  {% endif %}
+{% endblock content %}

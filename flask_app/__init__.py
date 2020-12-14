@@ -80,5 +80,5 @@ def create_app(test_config=None):
         ]
     }
 
-    #Talisman(app, content_security_policy=csp)
+    Talisman(app, content_security_policy=csp)
     return app

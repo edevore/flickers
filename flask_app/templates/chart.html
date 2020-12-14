@@ -1,0 +1,16 @@
+{% extends "header.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            Click here to go <a href="{{ url_for('groups.group_detail', group_id=poll.group.group_id) }}"> back to your group's page</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <iframe style="width: inherit; height: 1000;" srcdoc="{{ plot }}" frameborder="0">{{plot}}</iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}

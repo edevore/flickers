@@ -3,6 +3,8 @@ from flask_login import current_user, login_required
 from ..models import User, Group, Poll
 from ..forms import CreatePollForm
 from ..utils import new_id
+import plotly.graph_objects as go
+import io
 
 polls = Blueprint("polls", __name__)
 
@@ -31,3 +33,25 @@ def add_poll(group_id):
         return redirect(url_for("groups.group_detail", group_id=group_id))
     
     return render_template("create_poll.html", form=form)
+
+@login_required
+@polls.route("/chart/<poll_id>", methods=['GET', 'POST'])
+def generate_chart(poll_id):
+    poll = Poll.objects(poll_id=poll_id).first()
+    if poll is None:
+        flash("That poll does not exist.", 'error')
+        return redirect(url_for("groups.index"))
+
+    # Make bar chart of current vote using Plotly
+    counts = poll.get_counts()
+    fig = go.Figure([
+        go.Bar(x = list(counts.keys()), y=list(counts.values()))
+    ])
+
+    f = io.StringIO()
+    fig.write_html(f)
+    plot = f.getvalue()
+
+    print(counts)
+    print(poll.group.group_id)
+    return render_template("chart.html", plot=plot, poll=poll)

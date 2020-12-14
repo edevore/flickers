@@ -4,13 +4,20 @@
     <h1> Welcome to Flickers!<h1>
 </div>
 <div class="row">
-    This is a project by Evan Devore designed for my CMSC388J class and my fraternity, Sigma Alpha Mu.
+    This is a project by Evan Devore designed for my CMSC388J class and built for my fraternity, Sigma Alpha Mu.<br/>   
+</div>
+<div class="row">
+    <b style="color:rgb(56, 161, 14)">F</b>raternity + C<b style="color:rgb(56, 161, 14)">lickers</b> = <b style="color:rgb(56, 161, 14)">Flickers</b><br/>   
+</div>
+<div class="row">
+    See how I built it on my&nbsp<a href="https://github.com/edevore/flickers">Github</a>,&nbspor check out my&nbsp<a href="{{ url_for('misc.resume') }}">Resume</a>
 </div>
 <div class="row">
     Check the toolbar above to head to different pages.
 </div>
+<hr>
 <div class="row">
-    <h3>Search for an existing group here!</h3> 
+    <h3>Search for an existing group here!&nbsp</h3> 
     <form action="/" class="form-inline my-2 my-lg-0" method="POST">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -37,7 +44,7 @@
 </div>
 <div class="row">
     <h3>
-        <a class="nav-link" href="{{ url_for('groups.create_group') }}">Create a New Group!</a>
+        Or <a href="{{ url_for('groups.create_group') }}">Create a New Group!</a>
     </h3>
 </div>
 {% endblock %}

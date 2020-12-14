@@ -47,13 +47,7 @@ def create_app(test_config=None):
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)
-    #Talisman(app)
-
-    # Initialize talisman
-    #csp = {'default-src': '\'self\''}
-    #Talisman(app, content_security_policy=csp)
-
-
+   
     # Register new blueprints
     app.register_blueprint(users)
     app.register_blueprint(groups)
@@ -74,9 +68,13 @@ def create_app(test_config=None):
             'https://stackpath.bootstrapcdn.com/bootstrap/',
             'https://code.jquery.com/',
             'https://cdnjs.cloudflare.com/ajax/libs/popper.js/',
+            '\'unsafe-inline\'',
+            '\'unsafe-eval\''
             ],
         'style-src':[
             'https://stackpath.bootstrapcdn.com/bootstrap/',
+            '\'unsafe-inline\'',
+            '\'unsafe-eval\''
         ]
     }
 

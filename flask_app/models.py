@@ -6,14 +6,11 @@ from .utils import current_time
 import base64
 import mongoengine
 import itertools
+import pyotp
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.objects(username=user_id).first()
-
-#class Group(db.Document): pass # Forward declaration
-#class User(db.Document, UserMixin): pass
-#class Poll(db.Document): pass
 
 class User(db.Document, UserMixin):
     username = db.StringField(required=True, unique=True)
@@ -23,6 +20,7 @@ class User(db.Document, UserMixin):
     phone = db.StringField(required=True, unique=True, min_length=10, max_length=10)
     password = db.StringField(required=True)
     following = db.ListField(db.ReferenceField('Group'))
+    otp_secret = db.StringField(required=True, min_length=16, max_length=16, default=pyotp.random_base32())
 
     # Returns unique string identifying our object
     def get_id(self):
@@ -82,12 +80,13 @@ class Group(db.Document):
         print(username + " has been deleted from " + self.group_id)
 
     def next_poll(self):
-        current_poll=self.polls[0]
-        group = Group.objects(group_id=self.group_id).first()
-        # Remove current poll from polls and push onto past_polls
-        group.update(push__past_polls=current_poll)
-        group.update(pull__polls=current_poll)
-        return group.polls[0]
+        if len(self.polls) >= 1:
+            current_poll=self.polls[0]
+            group = Group.objects(group_id=self.group_id).first()
+            # Remove current poll from polls and push onto past_polls
+            group.update(push__past_polls=current_poll)
+            group.update(pull__polls=current_poll)
+            return group.polls[0] if len(group.polls) > 0 else None
 
 class Poll(db.Document):
     poll_id = db.StringField(required=True, unique=True)

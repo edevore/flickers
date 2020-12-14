@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from werkzeug.utils import secure_filename
 import phonenumbers
-from wtforms import StringField, IntegerField, SubmitField, TextAreaField, PasswordField, RadioField
+from wtforms import StringField, IntegerField, SubmitField, TextAreaField, PasswordField, RadioField, FieldList, FormField
 from wtforms.validators import (
     InputRequired,
     DataRequired,
@@ -42,7 +42,7 @@ class RegistrationForm(FlaskForm):
     phone = StringField("Phone", validators=[DataRequired(), Length(min=10, max=10)])
     # Regex for at least 8 letters, 1 Uppercase, 1 lowercase, 1 special, 1 number
     password = PasswordField("Password", validators=[InputRequired(), Regexp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", 
-        message="Password must be at least 8 characters, including 1 Uppercase letter, 1 lowercase letter, 1 number, and 1 special character #$!@$%^&*-")])
+        message="Password must be at least 8 characters, including 1 Uppercase letter, 1 lowercase letter, 1 number, and 1 special character [#$!@$%^&*-]")])
     confirm_password = PasswordField(
         "Confirm Password", validators=[InputRequired(), EqualTo("password")]
     )
@@ -111,12 +111,18 @@ class UpdateUsernameForm(FlaskForm):
                 raise ValidationError("That username is already taken")
 
 class JoinForm(FlaskForm):
-    submit = SubmitField("Join")
+    join = SubmitField("Join")
 
-class PollForm(FlaskForm):
-    #poll_type = RadioField(
-    #    "Poll Type", choices = [("Yes / No", "yn")], validators=[InputRequired()]
-    #)
+class NextPollForm(FlaskForm):
+    next = SubmitField("Advance to Next Poll")
+
+class GoToNewPollForm(FlaskForm):
+    new_poll = SubmitField("Create a New Poll")
+
+class CreatePollForm(FlaskForm):
     question = StringField("Question", validators=[InputRequired(), Length(min=5, max=40)])
     submit = SubmitField("Create Poll")
 
+class PollResponseForm(FlaskForm):
+    choices = RadioField("Choices", choices=[("Yes", "Yes"), ("No", "No"), ("Abstain", "Abstain")])
+    submit = SubmitField("Submit Response")

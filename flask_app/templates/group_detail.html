@@ -42,19 +42,81 @@
         </div>
         {% if current_user.is_authenticated %}
           {% if current_user.username == group.leader.username %}
-            Leaders can <a href="{{ url_for('polls.add_poll', group_id=group.group_id) }}">
-              Create a new poll
-            </a>
+            <h3> Leader Menu </h3>
+            <div class="col">
+              <form name = "go_to_new_poll_form" action="" method="post">
+                {{ go_to_new_poll_form.csrf_token }}
+                <div class="form-group">
+                  {{ go_to_new_poll_form.new_poll(type="submit", class="btn btn-primary btn-lg btn-block") }}
+                </div>
+              </form>
+            </div>
+            <div class="col">
+              <form name = "next_poll_form" action="" method="post">
+                {{ next_poll_form.csrf_token }}
+                <div class="form-group">
+                  {{ next_poll_form.next(type="submit", class="btn btn-primary btn-lg btn-block") }}
+                </div>
+              </form>
+            </div>
+            <hr>
           {% endif%}
           {% if current_user not in group.followers %}
-            <form action="" method="post">
+            <form name = "join_form" action="" method="post">
               {{ join_form.csrf_token }}
               <div class="form-group">
-                {{ join_form.submit(type="submit", class="btn btn-primary btn-lg btn-block") }}
+                {{ join_form.join(type="submit", class="btn btn-primary btn-lg btn-block") }}
               </div>
             </form>  
           {% else %}
-            <h5> Follower Polls Here </h5>
+            {% if current_poll %}
+            <div class="container-fluid">
+              <div class="row">
+                <h3>{{ current_poll.question }}?<h3>
+              </div>
+    
+              {% if poll_response_form %}
+                <form name = "poll_response_form" action="" method="post">
+                  {{ poll_response_form.csrf_token }}
+                  {% for subfield in poll_response_form.choices %}
+                    <div class="row">
+                      <td>{{ subfield }}&nbsp</td>
+                      <td>{{ subfield.label }}</td>
+                    </div>
+                  {% endfor %}
+                  <div class="row">
+                    {{ poll_response_form.submit(type="submit", class="btn btn-primary btn-lg btn-block") }}
+                  </div>
+                  <div class="row">
+                    <h3>Current Responses</h3>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Vote</th>
+                          <th scope="col">Count</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for (key, value) in current_poll.get_counts().items() %}
+                          <tr>
+                            <th scope="row">{{key}}</th>
+                            <td>{{value}}</td>
+                          </tr>
+                        {%endfor%}
+                      </tbody>
+                    </table>
+                  </div>
+                </form>
+              {% else %}
+                <h3>You voted:&nbsp{{ answer }}</h3>
+              {% endif %}
+            </div>
+            <div class="row">
+                <iframe style="width: inherit; height: 1000;" srcdoc="{{ plot }}" frameborder="0"></iframe>
+            </div>
+            {% else %}
+              <h3> There are no active polls currently </h3>
+            {% endif %}
           {% endif %}
         {% endif %}  
       </div>

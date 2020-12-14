@@ -1,8 +1,7 @@
 from flask import Blueprint, redirect, url_for, render_template, flash, request
 from flask_login import current_user, login_required
-#from ..forms import RegistrationForm, LoginForm, UpdateUsernameForm
 from ..models import User, Group, Poll
-from ..forms import PollForm
+from ..forms import CreatePollForm
 from ..utils import new_id
 
 polls = Blueprint("polls", __name__)
@@ -14,19 +13,19 @@ def add_poll(group_id):
     if group is None:
         flash("That group does not exist.", 'error')
         return redirect(url_for("groups.index"))
-    #elif current_user is not group.leader:
-    #    flash("You must be the group leader to make a poll.")
-    #    return redirect(url_for("groups.group_detail", group_id=group_id))
 
-    form = PollForm()
+    form = CreatePollForm()
     if form.validate_on_submit():
         poll = Poll(
             poll_id = new_id(),
             question=form.question.data,
-            #poll_type = form.poll_type.data,
             group = group.to_dbref(),
+            responses={}
         )
         poll.save()
+        poll.add_choice("Yes")
+        poll.add_choice("No")
+        poll.add_choice("Abstain")
         group.update(push__polls=poll.to_dbref())
         flash("Poll has been added", 'success')
         return redirect(url_for("groups.group_detail", group_id=group_id))

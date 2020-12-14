@@ -39,7 +39,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
 
     app.config.from_pyfile("config.py", silent=False), 
-    app.config["MONGODB_HOST"] = os.getenv("MONGODB_HOST")
+    #app.config["MONGODB_HOST"] = os.getenv("MONGODB_HOST")
 
     if test_config is not None:
         app.config.update(test_config)
@@ -47,7 +47,7 @@ def create_app(test_config=None):
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)
-    Talisman(app)
+    #Talisman(app)
 
     # Initialize talisman
     #csp = {'default-src': '\'self\''}
@@ -66,13 +66,19 @@ def create_app(test_config=None):
     login_manager.login_view = "users.login"
 
     csp = {
-    'default-src': ['\'self\'','stackpath.bootsrapcdn.com/*'],
-    'script-src':[
-        'stackpath.bootstrapcdn.com',
-        'code.jquery.com.',
-        'cdn.jsdelivr.net'
+        'default-src': [
+            '\'self\'',
+            'https://plotly.com/'
+        ],
+        'script-src':[
+            'https://stackpath.bootstrapcdn.com/bootstrap/',
+            'https://code.jquery.com/',
+            'https://cdnjs.cloudflare.com/ajax/libs/popper.js/',
+            ],
+        'style-src':[
+            'https://stackpath.bootstrapcdn.com/bootstrap/',
         ]
     }
 
-    Talisman(app, content_security_policy=csp)
+    #Talisman(app, content_security_policy=csp)
     return app

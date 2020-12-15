@@ -95,7 +95,7 @@ class GroupForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired()])
     password = PasswordField("Password", validators=[InputRequired()])
-    token = StringField('Token', validators=[InputRequired(), Length(min=6, max=6)])
+    token = StringField('Token (from validator app)', validators=[InputRequired(), Length(min=6, max=6)])
     submit = SubmitField("Login")
 
     def validate_token(self, token):

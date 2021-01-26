@@ -13,7 +13,7 @@ groups = Blueprint("groups", __name__)
 def index():
     search_form = SearchForm()
     if search_form.validate_on_submit():
-        return redirect(url_for("groups.group_detail", group_id=search_form.search_query.data))
+        return redirect(url_for("groups.group_detail", group_id=search_form.search_query.data.lower()))
 
     return render_template("home.html", search_form=search_form)
 

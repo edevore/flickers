@@ -30,7 +30,10 @@ class SearchForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     username = StringField(
-        "Username", validators=[InputRequired(), Length(min=1, max=40)]
+        "Username", validators=[InputRequired(), Length(min=1, max=40), Regexp("[a-zA-Z0-9]", 
+        message="Username must be under 40 characters long and have only alphanumeric characters")])
+    confirm_password = PasswordField(
+         "Confirm Password", validators=[InputRequired(), EqualTo("password")]
     )
     first_name = StringField(
         "First Name", validators=[InputRequired()]
@@ -59,7 +62,8 @@ class RegistrationForm(FlaskForm):
         
 class GroupForm(FlaskForm):
     group_id = StringField(
-        "Group ID", validators=[InputRequired(), Length(min=5, max=40)]
+        "Group ID", validators=[InputRequired(), Length(min=5, max=40), Regexp("[a-zA-Z0-9]", 
+        message="Group ID must be under 40 characters long and have only alphanumeric characters")]
     )
     description = TextAreaField(
         "Description", validators=[InputRequired(), Length(min=5, max=500)]
@@ -101,7 +105,8 @@ class ChartForm(FlaskForm):
     gen_chart = SubmitField("Generate Chart")
 
 class CreatePollForm(FlaskForm):
-    question = StringField("Question", validators=[InputRequired(), Length(min=5, max=40)])
+    question = StringField("Question", validators=[InputRequired(), Length(min=5, max=100)])
+    poll_type = RadioField("Poll Types", choices=[("Visible", "Visible"),("Leader Only", "Leader Only"), ("Anonymous", "Anonymous")])
     submit = SubmitField("Create Poll")
 
 class PollResponseForm(FlaskForm):

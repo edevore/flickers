@@ -22,8 +22,10 @@ def add_poll(group_id):
             poll_id = new_id(),
             question=form.question.data,
             group = group.to_dbref(),
-            responses={}
+            responses={},
+            poll_type=form.poll_type.data
         )
+        print(f"Poll Type {poll.poll_type}")
         poll.save()
         poll.add_choice("Yes")
         poll.add_choice("No")

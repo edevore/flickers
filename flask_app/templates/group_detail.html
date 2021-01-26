@@ -72,10 +72,43 @@
             {% if current_poll %}
             <div class="container-fluid">
               <div class="row">
-                <h3>{{ current_poll.question }}?<h3>
+                <h3>{{ current_poll.question }}<h3>
               </div>
-    
+              <div class="row">
+                <h5>Poll Type: {{current_poll.poll_type}}</h5>
+              </div>
+              {% if (current_poll.poll_type == "Visible") or (current_poll.poll_type == "Leader Only" and current_user.username == group.leader.username) %}
+              <div class="row"></div>
+                <div id="table-wrapper">
+                  <div id="table-scroll">
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th scope="col">Vote</th>
+                          <th scope="col">Count</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for (vote, users_list) in current_poll.get_responses().items() %}
+                          <tr>
+                            <th scope="row">{{vote}}</th>
+                            {% if users_list != [] %}
+                              {% for user in users_list %}
+                                <td>@{{user}}, </td>
+                              {% endfor %}
+                            {% else %}
+                            <td> No Votes </td>
+                            {% endif %}
+                          </tr>
+                        {%endfor%}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              {% endif %}    
               {% if poll_response_form %}
+              <hr> <h5> Your Vote: </h5>
                 <form name = "poll_response_form" action="" method="post">
                   {{ poll_response_form.csrf_token }}
                   {% for subfield in poll_response_form.choices %}

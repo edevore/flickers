@@ -90,6 +90,7 @@ class Poll(db.Document):
     group = db.ReferenceField(Group, required=True)
     choices = db.ListField(db.StringField(unique=True)) # Such as yes/no
     responses = db.DictField() # Key = User, Value = Vote
+    poll_type = db.StringField(required=True)
 
     # Returns unique string identifying our object
     def get_id(self):

@@ -5,12 +5,13 @@
         <h2>Create a New Poll</h2>
     </div>
 </div>
+<hr>
 <div class="row">
     <div class="col">
         <form action="" method="post">
             {{ form.csrf_token }}
             <div class="form-group">
-                {{ form.question.label(class="form-control-label") }}
+                <h5>{{ form.question.label(class="form-control-label") }}</h5>
                 {{ form.question(class="form-control form-control-lg") }}
                 {% if form.question.errors %}
                 <div class="alert alert-warning" role="alert">
@@ -20,7 +21,22 @@
                 </div>
                 {% endif %}
             </div>
-
+            <div class="form-group">
+                <h5>{{ form.poll_type.label(class="form-control-label") }}</h5> 
+                {% for subfield in form.poll_type %}
+                    <div class="row">
+                      <td>{{ subfield }}&nbsp</td>
+                      <td>{{ subfield.label }}</td>
+                    </div>
+                {% endfor %}
+                {% if form.poll_type.errors %}
+                <div class="alert alert-warning" role="alert">
+                    {% for error in form.poll_type.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
             <div class="form-group">
                 {{ form.submit(class="btn btn-primary btn-lg btn-block") }}
             </div>

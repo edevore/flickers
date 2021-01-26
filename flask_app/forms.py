@@ -39,7 +39,6 @@ class RegistrationForm(FlaskForm):
         "Last Name", validators=[InputRequired()]
     )
     email = StringField("Email", validators=[InputRequired(), Email()])
-    phone = StringField("Phone", validators=[DataRequired(), Length(min=10, max=10)])
     # Regex for at least 8 letters, 1 Uppercase, 1 lowercase, 1 special, 1 number
     password = PasswordField("Password", validators=[InputRequired(), Regexp("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", 
         message="Password must be at least 8 characters, including 1 Uppercase letter, 1 lowercase letter, 1 number, and 1 special character [#$!@$%^&*-]")])
@@ -57,27 +56,7 @@ class RegistrationForm(FlaskForm):
         user = User.objects(email=email.data).first()
         if user is not None:
             raise ValidationError("Email is taken by another user")
-
-    def validate_phone(self, phone):
-        # try:
-        #     p = phonenumbers.parse(phone.data)
-        #     p = "+1 " + p
-        #     if not phonenumbers.is_valid_number(p):
-        #         raise ValueError()
-        # except (phonenumbers.phonenumberutil.NumberParseException, ValueError):
-        #     raise ValidationError('Invalid phone number')
-        s = phone.data
-        nums = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
-        for c in s:
-            if c not in nums:
-                raise ValidationError("Number is invalid. Used a non-numeric character.")
         
-        # Make sure phone number is unique
-        user = User.objects(phone=phone.data).first()
-        if user is not None:
-            raise ValidationError("Phone number is taken by another user") 
-        
-
 class GroupForm(FlaskForm):
     group_id = StringField(
         "Group ID", validators=[InputRequired(), Length(min=5, max=40)]
@@ -95,17 +74,7 @@ class GroupForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField("Username", validators=[InputRequired()])
     password = PasswordField("Password", validators=[InputRequired()])
-    token = StringField('Token (from validator app)', validators=[InputRequired(), Length(min=6, max=6)])
     submit = SubmitField("Login")
-
-    def validate_token(self, token):
-        user = User.objects(username=self.username.data).first()
-        if user is not None:
-            tok_verified = pyotp.TOTP(user.otp_secret).verify(token.data)
-            if not tok_verified:
-                raise ValidationError("Invalid Token")
-
-
 
 class UpdateUsernameForm(FlaskForm):
     username = StringField(

@@ -9,6 +9,23 @@
     <div class="row">
         <h5>Username:&nbsp;</h5> @{{current_user.username}}
     </div>
+    
+    <div class="row">
+        <h5>Email:&nbsp;</h5>{{current_user.email}}
+    </div>
+
+    <div class = "row">
+        <h5>Following Groups:&nbsp;</h5> 
+    </div>
+
+    <div class="row">
+        <ul>
+        {% for group in current_user.following %}
+            <li><a href="{{ url_for('groups.group_detail', group_id=group.group_id) }}">@{{group.group_id}}: </a>{{ group.description }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+
     <div class="row">
         <div class="col">
             <form action="" method="post">
@@ -30,25 +47,6 @@
                 </div>
             </form>
         </div>
-    </div>
-
-    <div class="row">
-        <h5>Email:&nbsp;</h5>{{current_user.email}}
-    </div>
-    <div class="row">
-        <h5>Phone:&nbsp;</h5>{{current_user.phone}}
-    </div>
-
-    <div class = "row">
-        <h5>Following Groups:&nbsp;</h5> 
-    </div>
-
-    <div class="row">
-        <ul>
-        {% for group in current_user.following %}
-            <li><a href="{{ url_for('groups.group_detail', group_id=group.group_id) }}">@{{group.group_id}}: </a>{{ group.description }}</li>
-        {% endfor %}
-        </ul>
     </div>
     
 </div>

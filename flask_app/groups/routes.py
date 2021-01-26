@@ -7,7 +7,6 @@ from ..models import User, Group
 from ..utils import current_time
 from mongoengine.errors import NotUniqueError
 
-
 groups = Blueprint("groups", __name__)
 
 @groups.route("/", methods=["GET", "POST"])
@@ -39,9 +38,6 @@ def group_detail(group_id):
     go_to_new_poll_form = GoToNewPollForm()
     if go_to_new_poll_form.new_poll.data and go_to_new_poll_form.validate():
         return redirect(url_for("polls.add_poll", group_id=group.group_id))
-
-   
-
 
     # Build poll from leader for followers to see
     current_poll=None

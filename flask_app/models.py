@@ -1,12 +1,10 @@
 from flask_login import UserMixin
 from datetime import datetime
 from . import db, login_manager
-from . import config
 from .utils import current_time
 import base64
 import mongoengine
 import itertools
-import pyotp
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -17,10 +15,8 @@ class User(db.Document, UserMixin):
     first_name = db.StringField(required=True)
     last_name =db.StringField(required=True)
     email = db.EmailField(required=True, unique=True)
-    phone = db.StringField(required=True, unique=True, min_length=10, max_length=10)
     password = db.StringField(required=True)
     following = db.ListField(db.ReferenceField('Group'))
-    otp_secret = db.StringField(required=True, min_length=16, max_length=16, default=pyotp.random_base32())
 
     # Returns unique string identifying our object
     def get_id(self):

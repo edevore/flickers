@@ -22,9 +22,9 @@ movie {
 .comment-pic {
     max-width: 64px;
 }
-/* .nav-user {
+.nav-user {
     border-right: 1px #1d1d1d;
-} */
+}
 
 .token {
     max-width: 800;

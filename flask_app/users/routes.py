@@ -22,11 +22,11 @@ def register():
         try:
             hashed = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
             user = User(username=form.username.data, first_name = form.first_name.data, 
-            last_name = form.last_name.data, email=form.email.data, phone = form.phone.data, password=hashed)
+            last_name = form.last_name.data, email=form.email.data, password=hashed)
             user.save()
             session['new_username'] = user.username
 
-            return redirect(url_for("users.tfa"))
+            return redirect(url_for("users.login"))
         except Exception as e:
             print("Error: " + str(e))
             flash(f"Error: " + str(e), 'error')
@@ -76,41 +76,3 @@ def account():
         title="Account",
         username_form=username_form,
     )
-
-
-
-@users.route("/qr_code")
-def qr_code():
-    if 'new_username' not in session:
-        return redirect(url_for('groups.index'))
-    
-    user = User.objects(username=session['new_username']).first()
-    session.pop('new_username')
-
-    uri = pyotp.totp.TOTP(user.otp_secret).provisioning_uri(name=user.username, issuer_name='EDEVORE-FLICKERS-2FA')
-    img = qrcode.make(uri, image_factory=svg.SvgPathImage)
-    stream = BytesIO()
-    img.save(stream)
-
-    headers = {
-        'Content-Type': 'image/svg+xml',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0' # Expire immediately, so browser has to reverify everytime
-    }
-
-    return stream.getvalue(), headers
-
-@users.route("/tfa")
-def tfa():
-    if 'new_username' not in session:
-        return redirect(url_for('main.index'))
-
-    headers = {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0' # Expire immediately, so browser has to reverify everytime
-    }
-
-    return render_template('tfa.html'), headers
-

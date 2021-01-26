@@ -17,19 +17,14 @@ from datetime import datetime
 import os
 
 # local
-#from .client import MovieClient
-
-
 db = MongoEngine()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
-#movie_client = MovieClient(os.environ.get("OMDB_API_KEY"))
 
 # Import new blueprints
 from .users.routes import users
 from .groups.routes import groups
 from .polls.routes import polls
-from .misc.routes import misc
 
 def page_not_found(e):
     return render_template("404.html"), 404
@@ -37,9 +32,11 @@ def page_not_found(e):
 
 def create_app(test_config=None):
     app = Flask(__name__)
-
-    app.config.from_pyfile("config.py", silent=False), 
-    app.config["MONGODB_HOST"] = os.getenv("MONGODB_HOST")
+    #app.config.from_pyfile("config.py", silent=False), 
+    #app.config["MONGODB_HOST"] = os.getenv("MONGODB_HOST")
+    app.config['SECRET_KEY'] = b'r\\\xe5Xy\x93{\x07\xa0\xe8\xaajQ\xca\xd6\xbd'
+    #app.config['MONGODB_HOST'] = "mongodb://localhost:27017/quickVote"
+    app.config["MONGODB_HOST"] = "mongodb+srv://admin_user:v3^Qder8AZGSnkz%ktUm@cmsc388b-exercise4.iz7l7.mongodb.net/quickVote?retryWrites=true&w=majority"
 
     if test_config is not None:
         app.config.update(test_config)
@@ -51,12 +48,10 @@ def create_app(test_config=None):
     # Register new blueprints
     app.register_blueprint(users)
     app.register_blueprint(groups)
-    app.register_blueprint(misc)
     app.register_blueprint(polls)
 
     # Register error handler
     app.register_error_handler(404, page_not_found)
-
     login_manager.login_view = "users.login"
 
     csp = {

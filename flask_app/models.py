@@ -107,14 +107,14 @@ class Poll(db.Document):
         
         return counts
 
-    # Returns dict with Key = Vote, Value=List(Voters)
+    # Returns dict with Key = Vote, Value=List(Users (Voters) references)
     def get_responses(self):
         resp = dict()
         for choice in self.choices:
             resp[choice] = []
 
         for (k,v) in self.responses.items():
-            resp[v].append(k)
+            resp[v].append(User.objects(username=k).first())
         
         return resp
 

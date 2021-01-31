@@ -25,13 +25,14 @@
         {% endfor %}
         </ul>
     </div>
+    <hr>
 
     <div class="row">
+        <h5>Update Username:</h5>   
         <div class="col">
             <form action="" method="post">
                 {{ username_form.csrf_token }}
                 <div class="form-group">
-                    <!--{{ username_form.username.label(class="form-control-label") }} -->
                     {{ username_form.username(class="form-control form-control-lg") }}
     
                     {% if username_form.username.errors %}
@@ -48,8 +49,5 @@
             </form>
         </div>
     </div>
-    
 </div>
-
-
 {% endblock %}>

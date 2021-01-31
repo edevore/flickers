@@ -36,10 +36,6 @@ def page_not_found(e):
 def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object(Config())
-
-    if test_config is not None:
-        app.config.update(test_config)
-
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)

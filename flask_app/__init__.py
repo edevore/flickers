@@ -21,6 +21,9 @@ db = MongoEngine()
 login_manager = LoginManager()
 bcrypt = Bcrypt()
 
+# secrets
+from .config import Config
+
 # Import new blueprints
 from .users.routes import users
 from .groups.routes import groups
@@ -32,10 +35,7 @@ def page_not_found(e):
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    #app.config["MONGODB_HOST"] = os.getenv("MONGODB_HOST")
-    app.config['SECRET_KEY'] = b'r\\\xe5Xy\x93{\x07\xa0\xe8\xaajQ\xca\xd6\xbd'
-    app.config['MONGODB_HOST'] = "mongodb://localhost:27017/quickVote"
-    #app.config["MONGODB_HOST"] = "mongodb+srv://admin_user:v3^Qder8AZGSnkz%ktUm@cmsc388b-exercise4.iz7l7.mongodb.net/quickVote?retryWrites=true&w=majority"
+    app.config.from_object(Config())
 
     if test_config is not None:
         app.config.update(test_config)

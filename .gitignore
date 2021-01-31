@@ -6,7 +6,7 @@
 venv
 
 # Secrets
-#config.py
+config.py
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

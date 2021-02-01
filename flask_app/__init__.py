@@ -35,7 +35,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     
     app.config['MONGODB_HOST'] = os.getenv('MONGODB_HOST')
-    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    app.config['SECRET_KEY'] = os.urandom(32)
 
     db.init_app(app)
     login_manager.init_app(app)

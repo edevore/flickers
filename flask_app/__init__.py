@@ -39,6 +39,8 @@ def create_app(test_config=None):
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
     print(f'MONGO_HOST: {mongodb_host}')
     print(f'SECRET_KEY: {secret_key}')
+    print(type(mongodb_host))
+    print(type(secret_key))
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)

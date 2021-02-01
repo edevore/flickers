@@ -37,6 +37,8 @@ def create_app(test_config=None):
     app = Flask(__name__)
     app.config['MONGODB_HOST'] = os.getenv('MONGODB_HOST')
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    print(f'MONGO_HOST: {os.getenv('MONGODB_HOST')}')
+    print(f'SECRET_KEY: {os.getenv('SECRET_KEY')}')
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)

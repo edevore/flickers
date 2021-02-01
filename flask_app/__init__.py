@@ -33,12 +33,8 @@ def page_not_found(e):
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    mongodb_host = os.getenv('MONGODB_HOST')
-    secret_key = os.getenv('SECRET_KEY')
     app.config['MONGODB_HOST'] = os.getenv('MONGODB_HOST')
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-    print(f'MONGO_HOST: {mongodb_host}')
-    print(f'SECRET_KEY: {secret_key}')
     db.init_app(app)
     login_manager.init_app(app)
     bcrypt.init_app(app)

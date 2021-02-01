@@ -34,7 +34,7 @@ def page_not_found(e):
 def create_app(test_config=None):
     app = Flask(__name__)
     
-    app.config['MONGODB_HOST'] = os.getenv('MONGODB_HOST')
+    app.config['MONGODB_HOST'] = "mongodb+srv://dbadmin:m4friIWqwX3XkJnU@edevore-cluster.vfigo.mongodb.net/quickVote?retryWrites=true&w=majority"
     app.config['SECRET_KEY'] = os.urandom(32)
 
     db.init_app(app)
